@@ -3,24 +3,38 @@ import GoogleMapReact from "google-map-react";
 import LocationMarker from "./LocationMarker";
 import LocationInfoBox from "./LocationInfoBox";
 
-const Map = ({ eventData, center, zoom }) => {
+const Map = ({ eventData }) => {
     const [locationInfo, setLocationInfo] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState({lat: -7, lng: -55});
+
+    const getCurrentLocation = () => {
+        navigator.geolocation.getCurrentPosition(position => {
+            setCurrentLocation({lat: position.coords.latitude, lng: position.coords.longitude });
+        });
+    }
+
+    getCurrentLocation();
+
     const markers = eventData.map((ev) => {
-        if (
-            ev.categories &&
-            ev.categories.length &&
-            ev.categories[0].id === "wildfires"
-        ) {
-            return (
-                <LocationMarker
-                    key={ev.geometry[0].coordinates[1]}
-                    lat={ev.geometry[0].coordinates[1]}
-                    lng={ev.geometry[0].coordinates[0]}
-                    onClick={() => setLocationInfo({ id: ev.id, title: ev.title })}
-                />
-            );
-        }
-        return null;
+        return (
+            <LocationMarker
+                key={`${ev.geometry[0].coordinates.flat(2)[0]}&${ev.geometry[0].coordinates.flat(2)[1]}`}
+                lat={ev.geometry[0].coordinates.flat(2)[1]}
+                lng={ev.geometry[0].coordinates.flat(2)[0]}
+                description={ev.title}
+                type={ev.categories[0].id}
+                title={ev.categories[0].title}
+                sources={ev.sources}
+                onClick={() =>
+                    setLocationInfo({
+                        id: ev.id, 
+                        description: ev.title, 
+                        title: ev.categories[0].title, 
+                        sources: ev.sources 
+                    })
+                }
+            />
+        );
     });
 
     return (
@@ -29,21 +43,14 @@ const Map = ({ eventData, center, zoom }) => {
                 bootstrapURLKeys={{
                     key: "AIzaSyBay_q31Pe-zmLWeB-xOXS1xa-lCRY4MFM",
                 }}
-                defaultCenter={center}
-                defaultZoom={zoom}>
-                    {markers}
+                defaultCenter={currentLocation}
+                defaultZoom={5}
+            >
+                {markers}
             </GoogleMapReact>
             {locationInfo && <LocationInfoBox info={locationInfo} />}
         </div>
     );
-};
-
-Map.defaultProps = {
-    center: {
-        lat: 42.3265,
-        lng: -122.8756,
-    },
-    zoom: 6,
 };
 
 export default Map;

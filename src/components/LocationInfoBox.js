@@ -1,15 +1,17 @@
 const LocationInfoBox = ({ info }) => {
     return (
         <div className="location-info">
-            <h2>Event Location Info</h2>
+            <h3>{info.title}</h3>
+            <p className="description">{info.description}</p>
+            <small>Sources:</small>
             <ul>
-                <li>
-                    ID: <strong>{info.id}</strong>
-                </li>
-                <li>
-                    TITLE: <strong>{info.title}</strong>
-                </li>
-                <li></li>
+                {
+                    info.sources.map(source => (
+                        <li key={source.url}>
+                            <a href={source.url} target="_blank">{source.id}</a>
+                        </li>
+                    ))
+                }
             </ul>
         </div>
     );

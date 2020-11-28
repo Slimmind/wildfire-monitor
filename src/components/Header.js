@@ -1,10 +1,9 @@
-import { Icon } from "@iconify/react";
-import locationIcon from "@iconify/icons-mdi/fire-alert";
+import { ReactComponent as Logo } from "../assets/fire.svg";
 
 const Header = () => {
     return (
         <header className="header">
-            <h1><Icon icon={locationIcon} className="header-icon" />Wildfire Monitor (Powered by NASA)</h1>
+            <h1><Logo className="header-icon" />Wildfire Monitor (Powered by NASA)</h1>
         </header>
     );
 }
