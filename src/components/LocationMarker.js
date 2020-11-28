@@ -3,28 +3,25 @@ import { ReactComponent as VolcanoIcon } from "../assets/volcano.svg";
 import { ReactComponent as IceIcon } from "../assets/iceberg.svg";
 import { ReactComponent as StormIcon } from "../assets/storm.svg";
 
-
-const LocationMarker = ({ lat, lng, type, onClick }) => {
-    let icon;
+const getIconByType = (type) => {
     switch(type) {
         case "wildfires":
-            icon = <FireIcon className="location-icon" />
-            break;
+            return <FireIcon className="location-icon" />
         case "volcanoes":
-            icon = <VolcanoIcon className="location-icon" />
-            break;
+            return <VolcanoIcon className="location-icon" />
         case "seaLakeIce":
-            icon = <IceIcon className="location-icon" />
-            break;
+            return <IceIcon className="location-icon" />
         case "severeStorms":
-            icon = <StormIcon className="location-icon" />
+            return <StormIcon className="location-icon" />
+        default:
+            return null;
     };
-    
-    return (
-        <div className="location-marker" onClick={onClick}>
-            {icon}
-        </div>
-    );
-};
+}
+
+const LocationMarker = ({ type, onClick }) => (
+    <div className="location-marker" onClick={onClick}>
+        {getIconByType(type)}
+    </div>
+);
 
 export default LocationMarker;

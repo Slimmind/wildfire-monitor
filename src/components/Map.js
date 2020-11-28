@@ -16,20 +16,23 @@ const Map = ({ eventData }) => {
     getCurrentLocation();
 
     const markers = eventData.map((ev) => {
+        const lat = ev.geometry[0].coordinates.flat(2)[0];
+        const lng = ev.geometry[0].coordinates.flat(2)[1];
+        const category = ev.categories[0];
         return (
             <LocationMarker
-                key={`${ev.geometry[0].coordinates.flat(2)[0]}&${ev.geometry[0].coordinates.flat(2)[1]}`}
-                lat={ev.geometry[0].coordinates.flat(2)[1]}
-                lng={ev.geometry[0].coordinates.flat(2)[0]}
+                key={`${lat}&${lng}`}
+                lat={lng}
+                lng={lat}
                 description={ev.title}
-                type={ev.categories[0].id}
-                title={ev.categories[0].title}
+                type={category.id}
+                title={category.title}
                 sources={ev.sources}
                 onClick={() =>
                     setLocationInfo({
                         id: ev.id, 
                         description: ev.title, 
-                        title: ev.categories[0].title, 
+                        title: category.title, 
                         sources: ev.sources 
                     })
                 }
@@ -43,7 +46,7 @@ const Map = ({ eventData }) => {
                 bootstrapURLKeys={{
                     key: "AIzaSyBay_q31Pe-zmLWeB-xOXS1xa-lCRY4MFM",
                 }}
-                defaultCenter={currentLocation}
+                center={currentLocation}
                 defaultZoom={5}
             >
                 {markers}
